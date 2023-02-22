@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using universityApiBackend.DataAccess;
 using universityApiBackend.Models.DataModels;
+using universityApiBackend.Services;
 
 namespace universityApiBackend.Controllers
 {
@@ -16,9 +17,13 @@ namespace universityApiBackend.Controllers
     {
         private readonly UniversityDBContext _context;
 
-        public StudentsController(UniversityDBContext context)
+        // Service
+        private readonly IStudentsServices _studentsServices;
+
+        public StudentsController(UniversityDBContext context, IStudentsServices studentsServices)
         {
             _context = context;
+            _studentsServices = studentsServices;
         }
 
         // GET: api/Students
@@ -28,11 +33,30 @@ namespace universityApiBackend.Controllers
             return await _context.Students.ToListAsync();
         }
 
+        // GET: api/studentWithCourses
+        [HttpGet]
+        [Route("studentWithCourses")]
+        public async Task<ActionResult<IEnumerable<Student>>> GetStudentsWithCourses()
+        {
+            var students =  await _context.Students.ToListAsync();
+            return _studentsServices.GetStudentsWithCourses(students).ToList();
+        }
+
+        // GET: api/studentWithNoCourses
+        [HttpGet]
+        [Route("studentWithNotCourses")]
+        public async Task<ActionResult<IEnumerable<Student>>> GetStudentsWithNotCourses()
+        {
+            var students = await _context.Students.ToListAsync();
+            return _studentsServices.GetStudentsWithNotCourses(students).ToList();
+        }
+
         // GET: api/Students/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Student>> GetStudent(int id)
         {
             var student = await _context.Students.FindAsync(id);
+
 
             if (student == null)
             {

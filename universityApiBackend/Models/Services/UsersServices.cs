@@ -45,11 +45,11 @@ namespace universityApiBackend.Models.Services
 
         public IEnumerable<Course>? SearchCourseByLevelAndCategory(List<Course> listCourses, Levels level, Category category)
         {
-            var CousesByLevelAndCategegry = from course in listCourses
+            var CousesByLevelAndCategory = from course in listCourses
                                             where course.Level == level && course.Categories == category
                                             select course;
 
-            return CousesByLevelAndCategegry;
+            return CousesByLevelAndCategory;
         }
 
 
