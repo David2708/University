@@ -22,7 +22,7 @@ namespace universityApiBackend.Controllers
         }
 
         // GET: api/Categories
-        [HttpGet]
+        [HttpGet
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
             return await _context.Categories.ToListAsync();
